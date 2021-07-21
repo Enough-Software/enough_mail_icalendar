@@ -2,13 +2,13 @@
 iCalendar support for email / mime. Compatible with the iCalendar Message-Based Interoperability Protocol (iMIP) [RFC 6047](https://datatracker.ietf.org/doc/html/rfc6047).
 
 ## Installation
-Add this dependency your pubspec.yaml file:
+Add this dependencies your pubspec.yaml file:
 
 ```
 dependencies:
   enough_mail_icalendar: ^0.1.0
-  enough_mail: latest
-  enough_icalendar: latest
+  enough_mail: any
+  enough_icalendar: any
 ```
 The latest version or `enough_mail_icalendar` is [![enough_mail_icalendar version](https://img.shields.io/pub/v/enough_mail_icalendar.svg)](https://pub.dartlang.org/packages/enough_mail_icalendar).
 
@@ -96,6 +96,11 @@ ParticipantStatus? getParticipantStatus(MimeMessage message) {
 Please file feature requests and bugs at the [issue tracker][tracker].
 
 [tracker]: https://github.com/Enough-Software/enough_mail_icalendar/issues
+
+## Related Projects
+* Use [enough_icalendar](https://pub.dev/packages/enough_icalendar) for managing iCalendar objects
+* Use [enough_mail](https://pub.dev/packages/enough_mail) for email management via IMAP, POP3 and SMTP
+
 
 ## Null-Safety
 `enough_mail_icalendar` is null-safe.
