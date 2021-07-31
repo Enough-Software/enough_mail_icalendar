@@ -11,7 +11,7 @@ class VMessageBuilder {
     List<MailAddress> toRecipients = const [],
     List<MailAddress> ccRecipients = const [],
     List<MailAddress> bccRecipients = const [],
-    String? plaintTextPart,
+    String? plainTextPart,
     MailAddress? from,
     String filename = 'invite.ics',
     String? subject,
@@ -38,23 +38,32 @@ class VMessageBuilder {
       builder.cc = ccRecipients;
       builder.bcc = bccRecipients;
     }
-    final text = plaintTextPart ??
+    final partBuilder = builder.addMultipartAlternative();
+
+    final text = plainTextPart ??
         calendar.description ??
         calendar.summary ??
         'This message contains an calendar invite';
-    builder.addTextPlain(text);
-    final calendarPart = builder.addText(
-      calendar.toString(),
+    partBuilder.addTextPlain(text);
+    final calendarText = calendar.toString();
+    final calendarPart = partBuilder.addText(
+      calendarText,
       mediaType: MediaSubtype.textCalendar.mediaType,
-      disposition: ContentDispositionHeader.from(
-        ContentDisposition.attachment,
-        filename: filename,
-      ),
     );
     if (calendar.method != null) {
       final contentType = calendarPart.contentType!;
       contentType.parameters['method'] = calendar.method!.name;
     }
+    // add attachments:
+    builder.addText(
+      calendarText,
+      mediaType: MediaType.fromText('application/ics'),
+      transferEncoding: TransferEncoding.base64,
+      disposition: ContentDispositionHeader.from(
+        ContentDisposition.attachment,
+        filename: filename,
+      ),
+    );
     return builder;
   }
 
@@ -84,7 +93,7 @@ class VMessageBuilder {
       from: from,
       toRecipients: [organizer.mailAddress!],
       filename: icsFilename,
-      plaintTextPart: comment ??
+      plainTextPart: comment ??
           '"${calendar.summary}" is ${participantStatus.name} by $from.',
       subject: subject,
     );

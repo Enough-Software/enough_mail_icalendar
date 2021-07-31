@@ -33,9 +33,13 @@ void main() {
     expect(message.to![3].personalName, 'Marie Curie, née Sklodowska');
     expect(message.parts, isNotEmpty);
     expect(message.parts?.length, 2);
-    expect(message.parts![0].mediaType.sub, MediaSubtype.textPlain);
-    expect(message.parts![1].mediaType.sub, MediaSubtype.textCalendar);
-    final decodedInvite = message.parts![1].decodeContentVCalendar();
+    expect(message.parts![0].mediaType.sub, MediaSubtype.multipartAlternative);
+    expect(message.parts![0].parts, isNotEmpty);
+    expect(message.parts![0].parts?.length, 2);
+    expect(message.parts![0].parts![0].mediaType.sub, MediaSubtype.textPlain);
+    expect(
+        message.parts![0].parts![1].mediaType.sub, MediaSubtype.textCalendar);
+    final decodedInvite = message.parts![0].parts![1].decodeContentVCalendar();
     // print(decodedInvite);
     expect(decodedInvite, isNotNull);
     expect(decodedInvite!.description, 'Let\'s discuss what to research next.');
@@ -43,8 +47,7 @@ void main() {
   });
 
   test('Create participation response message', () {
-    final inviteText =
-        '''BEGIN:VCALENDAR
+    final inviteText = '''BEGIN:VCALENDAR
 PRODID:enough_icalendar
 VERSION:2.0
 METHOD:REQUEST
@@ -80,9 +83,14 @@ END:VCALENDAR''';
     expect(message.to![0].personalName, 'Andrea Ghez');
     expect(message.parts, isNotEmpty);
     expect(message.parts?.length, 2);
-    expect(message.parts![0].mediaType.sub, MediaSubtype.textPlain);
-    expect(message.parts![1].mediaType.sub, MediaSubtype.textCalendar);
-    final decodedReply = message.parts![1].decodeContentVCalendar();
+    expect(message.parts![0].mediaType.sub, MediaSubtype.multipartAlternative);
+    expect(message.parts![0].parts, isNotEmpty);
+    expect(message.parts![0].parts?.length, 2);
+    expect(message.parts![0].parts![0].mediaType.sub, MediaSubtype.textPlain);
+    expect(
+        message.parts![0].parts![1].mediaType.sub, MediaSubtype.textCalendar);
+    expect(message.parts![1].mediaType.text, 'application/ics');
+    final decodedReply = message.parts![0].parts![1].decodeContentVCalendar();
     // print(decodedInvite);
     expect(decodedReply, isNotNull);
     expect(decodedReply!.attendees, isNotEmpty);

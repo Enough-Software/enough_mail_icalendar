@@ -60,7 +60,7 @@ extension ExtensionMailClient on MailClient {
       calendar,
       from: account.fromAddress,
       filename: icsFilename,
-      plaintTextPart: plainTextPart,
+      plainTextPart: plainTextPart,
     );
     await sendMessage(messageBuilder.buildMimeMessage());
   }
