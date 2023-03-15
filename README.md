@@ -6,7 +6,7 @@ Add this dependencies your pubspec.yaml file:
 
 ```
 dependencies:
-  enough_mail_icalendar: ^0.1.0
+  enough_mail_icalendar: ^0.2.1
   enough_mail: any
   enough_icalendar: any
 ```
