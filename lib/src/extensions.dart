@@ -8,10 +8,16 @@ const String _icalFlagHeader = '\$ical';
 
 /// iCal extension methods for enough_mail [MailClient]
 extension ExtensionMailClient on MailClient {
-  /// Changes the [participantStatus] for the given[calendar], e.g. to accept or decline a meeting request, generates and sends the corresponding message.
+  /// Changes the [participantStatus] for the given[calendar], e.g. to accept
+  /// or decline a meeting request, generates and sends the corresponding
+  /// message.
   ///
-  /// When you specify the [originatingMessage] a flag will tried be stored marking this message as replied with the given [particpantStatus]. Compare [ExtensionMimeMessage.calendarParticipationStaus] getter.
-  /// Optionally specify a [comment], the [productId] that ends up in the generated [VCalendar] reply
+  /// When you specify the [originatingMessage] a flag will tried be stored
+  /// marking this message as replied with the given [participantStatus].
+  /// Compare `ExtensionMimeMessage.calendarParticipationStatus` getter.
+  ///
+  /// Optionally specify a [comment], the [productId] that ends up in the
+  ///  generated [VCalendar] reply
   /// and the [icsFilename] that defaults to `reply.ics`.
   Future<void> sendCalendarReply(
     VCalendar calendar,
@@ -32,7 +38,7 @@ extension ExtensionMailClient on MailClient {
     await sendMessage(messageBuilder.buildMimeMessage());
     if (originatingMessage != null) {
       // flag originating message as replied with the participant status:
-      final flagName = '$_icalFlagHeader${participantStatus.name!}';
+      final flagName = '$_icalFlagHeader${participantStatus.name}';
       if (!originatingMessage.hasFlag(flagName)) {
         final existingIcalFlags = originatingMessage.flags
                 ?.where((flag) => flag.startsWith(_icalFlagHeader)) ??
@@ -95,6 +101,7 @@ extension ExtensionMimeMessage on MimeMessage {
   }
 }
 
+/// iCal extension methods for enough_mail [VCalendar]
 extension ExtensionCalendar on VCalendar {
   /// Retrieves the attendee mailing addresses from the first component
   /// with a attendees getter.
@@ -114,6 +121,7 @@ extension ExtensionCalendar on VCalendar {
   }
 }
 
+/// iCal extension methods for enough_mail [UserProperty]
 extension ExtensionAttendeeProperty on UserProperty {
   /// Retrieves the mail address
   MailAddress? get mailAddress {
@@ -125,6 +133,7 @@ extension ExtensionAttendeeProperty on UserProperty {
   }
 }
 
+/// iCal extension methods for enough_mail [MailAddress]
 extension ExtensionMailAddress on MailAddress {
   /// Converts this mail address to an iCalendar attendee property
   AttendeeProperty get attendee =>
@@ -135,6 +144,7 @@ extension ExtensionMailAddress on MailAddress {
       OrganizerProperty.create(email: email, commonName: personalName)!;
 }
 
+/// iCal extension methods for enough_mail [MimePart]
 extension ExtensionMimePart on MimePart {
   /// Decodes this mime message part's content as a [VCalendar], if possible.
   VCalendar? decodeContentVCalendar() {
@@ -150,6 +160,7 @@ extension ExtensionMimePart on MimePart {
   }
 }
 
+/// iCal extension methods for enough_mail [ParticipantStatus]
 extension ExtensionParticipantStatus on ParticipantStatus {
   /// Retrieves the IMAP flag name for this participant status
   String get flag => '$_icalFlagHeader$name';
